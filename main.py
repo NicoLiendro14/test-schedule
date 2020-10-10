@@ -1,10 +1,13 @@
-global index
-index = 0
+from apscheduler.schedulers.blocking import BlockingScheduler
 
-def do_something():
-    global index
-    index += 1
-    print("I'm doing something, for example, adding values like this: " + str(index))
+sched = BlockingScheduler()
 
-if __name__ == "__main__":
-    do_something()
+@sched.scheduled_job('interval', minutes=1)
+def timed_job():
+    print('This job is run every minute.')
+
+@sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
+def scheduled_job():
+    print('This job is run every weekday at 5pm.')
+
+sched.start()
